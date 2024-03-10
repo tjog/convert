@@ -1,20 +1,40 @@
-import { useState, useRef } from "react";
+import { useState, useRef, MutableRefObject } from "react";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
-import { toBlobURL, fetchFile } from "@ffmpeg/util";
+import { toBlobURL } from "@ffmpeg/util";
 import './App.css'
+import { Button } from "./components/ui/button";
+import TranscodeExample from "./examples/TranscodeAviToMp4Example";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./components/ui/dropdown-menu";
+import ResizeExample from "./examples/ResizeExample";
+import ArbitraryCommand from "./ArbitraryCommand";
+
+enum Example {
+  AVI_TO_MP4 = "AVI to MP4",
+  JPG_RESIZE = "JPG resize",
+  ARBITRARY = "Arbitrary FFMPEG command",
+}
+
+const getExampleBody = (selectedExample: Example, ffmpegRef: MutableRefObject<FFmpeg>) => {
+  switch (selectedExample) {
+    case Example.AVI_TO_MP4:
+      return <TranscodeExample ffmpegRef={ffmpegRef} />;
+    case Example.JPG_RESIZE:
+      return <ResizeExample ffmpegRef={ffmpegRef} />;
+    case Example.ARBITRARY:
+      return <ArbitraryCommand ffmpegRef={ffmpegRef} />;
+  }
+};
 
 function App() {
   const [loaded, setLoaded] = useState(false);
   const ffmpegRef = useRef(new FFmpeg());
-  const videoRef = useRef<HTMLVideoElement | null>(null)
-  const messageRef = useRef<HTMLParagraphElement | null>(null)
+
+  const [selectedExample, setSelectedExample] = useState<Example | null>(null);
 
   const load = async () => {
     const baseURL = "https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/esm";
     const ffmpeg = ffmpegRef.current;
-    ffmpeg.on("log", ({ message }) => {
-      if (messageRef.current) messageRef.current.innerHTML = message;
-    });
+
     // toBlobURL is used to bypass CORS issue, urls with the same
     // domain can be used directly.
     await ffmpeg.load({
@@ -31,29 +51,29 @@ function App() {
     setLoaded(true);
   };
 
-  const transcode = async () => {
-    const videoURL = "https://raw.githubusercontent.com/ffmpegwasm/testdata/master/video-15s.avi";
-    const ffmpeg = ffmpegRef.current;
-    await ffmpeg.writeFile("input.avi", await fetchFile(videoURL));
-    await ffmpeg.exec(["-i", "input.avi", "output.mp4"]);
-    const fileData = await ffmpeg.readFile('output.mp4');
-    const data = new Uint8Array(fileData as ArrayBuffer);
-    if (videoRef.current) {
-      videoRef.current.src = URL.createObjectURL(
-        new Blob([data.buffer], { type: 'video/mp4' })
-      )
-    }
-  };
-
   return loaded ? (
     <>
-      <video ref={videoRef} controls></video>
-      <br />
-      <button onClick={transcode}>Transcode avi to mp4</button>
-      <p ref={messageRef}></p>
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <Button variant="outline">Choose example</Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          {Object.entries(Example).map(([name, value]) => {
+            return (
+              <DropdownMenuItem
+                key={name}
+                onSelect={() => setSelectedExample(value)}
+              >
+                {value}
+              </DropdownMenuItem>
+            );
+          })}
+        </DropdownMenuContent>
+      </DropdownMenu>
+      {selectedExample && getExampleBody(selectedExample, ffmpegRef)}
     </>
   ) : (
-    <button onClick={load}>Load ffmpeg-core</button>
+    <Button onClick={load}>Load ffmpeg-core</Button>
   );
 }
 
