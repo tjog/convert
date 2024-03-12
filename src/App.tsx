@@ -4,7 +4,7 @@ import { toBlobURL } from "@ffmpeg/util";
 import './App.css'
 import { Button } from "./components/ui/button";
 import TranscodeExample from "./examples/TranscodeAviToMp4Example";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./components/ui/dropdown-menu";
 import ResizeExample from "./examples/ResizeExample";
 import ArbitraryCommand from "./ArbitraryCommand";
 
