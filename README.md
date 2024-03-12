@@ -1,30 +1,28 @@
-# React + TypeScript + Vite
+# ↔️ Convert
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repository implements a simple React frontend that wraps [ffmpeg.wasm](https://github.com/ffmpegwasm/ffmpeg.wasm).
 
-Currently, two official plugins are available:
+The frontend needs to be refined, but the functional parts are there.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Why?
 
-## Expanding the ESLint configuration
+- I got tired of searching for online convert tools, that I know could just be a FFMPEG command away.
+- Privacy, fully browser local
+- No hassle, does not require installing a dedicated tool.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Disclaimer
 
-- Configure the top-level `parserOptions` property like this:
+- Like also stated by ffmpeg.wasm, performance in WASM virtual machines are slower than the native thing.
+  Use of this tool is primarily for one-offs or smaller jobs. If you regularly do heavy media conversion
+  I recommend finding another way, e.g. installing FFMPEG natively and using its CLI, or a different GUI
+  wrapper not using WASM.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Libraries / Software used
+
+- React
+- shadcn/ui
+  - Tailwind
+- TypeScript
+- Vite
+- ffmpeg.wasm

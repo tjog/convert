@@ -1,8 +1,5 @@
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
-// import { CommandMenu } from "@/components/command-menu"
-// import { MainNav } from "@/components/main-nav"
-// import { MobileNav } from "@/components/mobile-nav"
 import { ModeToggle } from "@/components/mode-toggle"
 import { buttonVariants } from "@/components/ui/button"
 import { ArrowRightLeft, Github } from "lucide-react"
@@ -19,12 +16,7 @@ export function SiteHeader() {
                         </span>
                     </a>
                 </div>
-                {/* <MainNav />
-                <MobileNav /> */}
                 <div className="flex flex-1 items-center space-x-2 justify-end">
-                    {/* <div className="w-full flex-1 md:w-auto md:flex-none">
-                        <CommandMenu />
-                    </div> */}
                     <nav className="flex items-center">
                         <a
                             href={siteConfig.links.github}

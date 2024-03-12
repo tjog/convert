@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
-// import { fetchFile } from "@ffmpeg/util";
 import { Button } from "./components/ui/button";
 import React from "react";
 
@@ -32,25 +31,6 @@ function ArbitraryCommand({ ffmpegRef }: { ffmpegRef: React.MutableRefObject<FFm
         setProgress(progress);
         setExecutionTime(time);
     });
-
-    // const [files, setFiles] = React.useState<FileList | null>(null);
-    // const [inputFiles, setInputFiles] = React.useState<FileList | null>(null);
-
-    // const resize = async () => {
-    //     const imageURL = "https://raw.githubusercontent.com/ffmpegwasm/testdata/c81125391a0ada7599edc6bff2da51c1a3ed38d0/image.jpg";
-    //     const ffmpeg = ffmpegRef.current;
-    //     await ffmpeg.writeFile("1.jpg", await fetchFile(imageURL));
-    //     // -i 1.jpg -vf scale="iw/1:ih/2" 2.jpg
-    //     await ffmpeg.exec(["-i", "1.jpg", "-vf", "scale=iw/1:ih/2", "2.jpg"]);
-    //     // await ffmpeg.exec(["-i", "input.avi", "output.mp4"]);
-    //     const fileData = await ffmpeg.readFile('2.jpg');
-    //     const data = new Uint8Array(fileData as ArrayBuffer);
-    //     if (imageRef.current) {
-    //         imageRef.current.src = URL.createObjectURL(
-    //             new Blob([data.buffer], { type: 'video/mp4' })
-    //         )
-    //     }
-    // };
 
     const [error, setError] = React.useState<Partial<Record<keyof Form, string>>>({});
 
@@ -183,45 +163,6 @@ function ArbitraryCommand({ ffmpegRef }: { ffmpegRef: React.MutableRefObject<FFm
         </>
     )
 
-    // return (
-    //     <>
-
-
-    //         <form onSubmit={(e) => {
-    //             e.preventDefault();
-    //             console.log(e);
-    //         }} className="space-y-8">
-    //             <Label>Input Files</Label>
-    //             <Slot>
-    //                 <Input type="file" multiple />
-    //             </Slot>
-    //             <p className={cn("text-[0.8rem] text-muted-foreground")}>
-    //                 These are the input files to be stored and read by FFMPEG.
-    //             </p>
-    //             <Label>Output File Names</Label>
-    //             <Slot>
-    //                 <Input type="text" placeholder="Output File Names" />
-    //             </Slot>
-    //             <p className={cn("text-[0.8rem] text-muted-foreground")}>
-    //                 These are the output file names to be written by FFMPEG.
-    //             </p>
-    //             <Label>Username</Label>
-    //             <Slot>
-    //                 <Input type="text" placeholder="Command" />
-    //             </Slot>
-    //             <p className={cn("text-[0.8rem] text-muted-foreground")}>
-    //                 Arguments to be given to FFMPEG.
-    //             </p>
-    //             <Button type="submit">Execute</Button>
-    //         </form >
-
-    //         {/* <input type="file" onChange={(e) => setInputFiles(e.target.files)} />
-    //         <img ref={imageRef}></img>
-    //         <br />
-    //         <Button onClick={() => { void resize() }}>Resize image to half its size</Button>
-    //         <p ref={messageRef}></p> */}
-    //     </>
-    // )
 }
 
 export default ArbitraryCommand

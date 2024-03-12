@@ -17,12 +17,10 @@ function ResizeExample({ ffmpegRef }: { ffmpegRef: React.MutableRefObject<FFmpeg
         const imageURL = "https://raw.githubusercontent.com/ffmpegwasm/testdata/c81125391a0ada7599edc6bff2da51c1a3ed38d0/image.jpg";
         const ffmpeg = ffmpegRef.current;
         await ffmpeg.writeFile("1.jpg", await fetchFile(imageURL));
-        // -i 1.jpg -vf scale="iw/1:ih/2" 2.jpg
         const args = ["-i", "1.jpg", "-vf", "scale=iw/1:ih/2", "2.jpg"]
         console.log('Executing with args:', args);
         const result = await ffmpeg.exec(args);
         console.log('Result:', result);
-        // await ffmpeg.exec(["-i", "input.avi", "output.mp4"]);
         const fileData = await ffmpeg.readFile('2.jpg');
         const data = new Uint8Array(fileData as ArrayBuffer);
         if (imageRef.current) {
