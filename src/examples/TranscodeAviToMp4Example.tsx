@@ -1,16 +1,25 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile } from "@ffmpeg/util";
 import { Button } from "../components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { toMinutesAndSeconds } from "@/lib/utils";
 
 
 function TranscodeAviToMp4Example({ ffmpegRef }: { ffmpegRef: React.MutableRefObject<FFmpeg> }) {
     const videoRef = useRef<HTMLVideoElement | null>(null)
     const messageRef = useRef<HTMLParagraphElement | null>(null)
+    const [progress, setProgress] = useState<number | null>(null)
+    const [executionTime, setExecutionTime] = useState<number | null>(null)
     const ffmpeg = ffmpegRef.current;
 
     ffmpeg.on("log", ({ message }) => {
         if (messageRef.current) messageRef.current.innerHTML = message;
+    });
+    // The progress events are accurate only when the length of input and output video/audio file are the same.
+    ffmpeg.on("progress", ({ progress, time }) => {
+        setProgress(progress);
+        setExecutionTime(time);
     });
 
     const transcode = async () => {
@@ -27,11 +36,17 @@ function TranscodeAviToMp4Example({ ffmpegRef }: { ffmpegRef: React.MutableRefOb
         }
     };
 
+    const { minutes, seconds } = executionTime ?
+        toMinutesAndSeconds(executionTime / 1000000) /* divide by AV_TIME_BASE , FFMPEG internal time base*/
+        : { minutes: 0, seconds: 0 };
+
     return (
         <>
             <video ref={videoRef} controls></video>
             <br />
             <Button onClick={transcode}>Transcode avi to mp4</Button>
+            {progress && <Progress value={progress * 100}></Progress>}
+            {executionTime && <p>Currently at {minutes}min {seconds.toFixed(2)}sec in media</p>}
             <p ref={messageRef}></p>
         </>
     )

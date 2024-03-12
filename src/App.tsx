@@ -4,10 +4,9 @@ import { toBlobURL } from "@ffmpeg/util";
 import './App.css'
 import { Button } from "./components/ui/button";
 import TranscodeExample from "./examples/TranscodeAviToMp4Example";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./components/ui/dropdown-menu";
 import ResizeExample from "./examples/ResizeExample";
 import ArbitraryCommand from "./ArbitraryCommand";
-
+import { Select, SelectItem, SelectTrigger, SelectContent, SelectValue } from "./components/ui/select";
 enum Example {
   AVI_TO_MP4 = "AVI to MP4",
   JPG_RESIZE = "JPG resize",
@@ -51,30 +50,32 @@ function App() {
     setLoaded(true);
   };
 
-  return loaded ? (
+  return (<div className="container relative"> {loaded ? (
     <>
-      <DropdownMenu>
-        <DropdownMenuTrigger>
-          <Button variant="outline">Choose example</Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
+      <Select onValueChange={(value) => setSelectedExample(value as Example | null)}>
+        <SelectTrigger>
+          <SelectValue placeholder="Choose example" />
+        </SelectTrigger>
+        <SelectContent>
           {Object.entries(Example).map(([name, value]) => {
             return (
-              <DropdownMenuItem
+              <SelectItem
                 key={name}
-                onSelect={() => setSelectedExample(value)}
+                value={value}
+                onChange={() => setSelectedExample(value)}
               >
                 {value}
-              </DropdownMenuItem>
+              </SelectItem>
             );
           })}
-        </DropdownMenuContent>
-      </DropdownMenu>
+        </SelectContent>
+      </Select>
       {selectedExample && getExampleBody(selectedExample, ffmpegRef)}
     </>
   ) : (
     <Button onClick={load}>Load ffmpeg-core</Button>
-  );
+  )}
+  </div>);
 }
 
 export default App

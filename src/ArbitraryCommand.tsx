@@ -7,6 +7,9 @@ import { Input } from "./components/ui/input";
 import { FormControl, FormDescription, FormItem, FormLabel, FormMessage } from "./components/ui/form-no-rhf";
 import { Progress } from "./components/ui/progress";
 import { Textarea } from "./components/ui/textarea";
+import InlineCode from "./components/typography/inline-code";
+import { toMinutesAndSeconds } from "./lib/utils";
+import { Badge } from "./components/ui/badge";
 
 interface Form {
     inputFiles: FileList;
@@ -88,6 +91,10 @@ function ArbitraryCommand({ ffmpegRef }: { ffmpegRef: React.MutableRefObject<FFm
 
     }
 
+    const { minutes, seconds } = executionTime ?
+        toMinutesAndSeconds(executionTime / 1000000) /* divide by AV_TIME_BASE , FFMPEG internal time base*/
+        : { minutes: 0, seconds: 0 };
+
     return (
         <>
             <form onSubmit={(e) => {
@@ -141,12 +148,12 @@ function ArbitraryCommand({ ffmpegRef }: { ffmpegRef: React.MutableRefObject<FFm
                     </FormMessage>
                 </FormItem>
                 <FormItem>
-                    <FormLabel>Username</FormLabel>
+                    <FormLabel>Command</FormLabel>
                     <FormControl>
                         <Input name="command" type="text" placeholder="Command" />
                     </FormControl>
                     <FormDescription>
-                        Arguments to be given to FFMPEG.
+                        Arguments to be given to FFMPEG (including <InlineCode>-i INPUT_FILE</InlineCode> and <InlineCode>OUTPUT_FILE</InlineCode> arguments).
                     </FormDescription>
                     <FormMessage>
                         {error.command}
@@ -154,11 +161,13 @@ function ArbitraryCommand({ ffmpegRef }: { ffmpegRef: React.MutableRefObject<FFm
                 </FormItem>
                 <Button type="submit">Execute</Button>
             </form>
-            {progress && <Progress value={progress}></Progress>}
-            {executionTime && <p>Execution time:{" "}{executionTime}</p>}
+            {progress && <Progress value={progress * 100}></Progress>}
+            {executionTime && <p>Currently at {minutes}min {seconds.toFixed(2)}sec in media</p>}
             <p ref={messageRef}></p>
-            <h6>Log</h6>
-            <Button onClick={() => setMessages([])}>Clear log</Button>
+            <div className="mt-4 text-sm font-medium leading-none">
+                Message log
+                <Badge className="mx-3" variant="destructive" onClick={() => setMessages([])}>Clear</Badge>
+            </div>
             <Textarea value={messages.join("\n")} readOnly></Textarea>
         </>
     )
