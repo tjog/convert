@@ -1,0 +1,6 @@
+# Configuration for Cloudflare Pages to add the necessary headers for cross origin isolated state
+
+# Must match the root document and the worker script, so just match everything
+/*
+    Cross-Origin-Embedder-Policy: require-corp
+    Cross-Origin-Opener-Policy: same-origin
