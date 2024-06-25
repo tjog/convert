@@ -1,13 +1,17 @@
 import { useRef } from "react";
-import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile } from "@ffmpeg/util";
 import { Button } from "../components/ui/button";
+import { useFfmpeg } from "@/components/ffmpeg-provider";
 
 
-function ResizeExample({ ffmpegRef }: { ffmpegRef: React.MutableRefObject<FFmpeg> }) {
+function ResizeExample() {
     const imageRef = useRef<HTMLImageElement | null>(null)
     const messageRef = useRef<HTMLParagraphElement | null>(null)
-    const ffmpeg = ffmpegRef.current;
+    const { ffmpeg, loaded } = useFfmpeg()
+
+    if (!loaded) {
+        return <p>Loading...</p>
+    }
 
     ffmpeg.on("log", ({ message }) => {
         if (messageRef.current) messageRef.current.innerHTML = message;
@@ -15,7 +19,6 @@ function ResizeExample({ ffmpegRef }: { ffmpegRef: React.MutableRefObject<FFmpeg
 
     const resize = async () => {
         const imageURL = "https://raw.githubusercontent.com/ffmpegwasm/testdata/c81125391a0ada7599edc6bff2da51c1a3ed38d0/image.jpg";
-        const ffmpeg = ffmpegRef.current;
         await ffmpeg.writeFile("1.jpg", await fetchFile(imageURL));
         const args = ["-i", "1.jpg", "-vf", "scale=iw/1:ih/2", "2.jpg"]
         console.log('Executing with args:', args);

@@ -9,6 +9,9 @@ export default defineConfig({
     targets: [
       // Cloudflare Pages configuration for cross-origin isolation
       { src: "_headers", dest: "" },
+      // Self hosted ffmpeg.wasm blobs
+      // { src: "node_modules/@ffmpeg/ffmpeg/dist/ffmpeg-core.js", dest: "ffmpeg-core.js" },
+      // { src: "node_modules/@ffmpeg/ffmpeg/dist/ffmpeg-core.wasm", dest: "ffmpeg-core.wasm" },
     ],
 
   })],

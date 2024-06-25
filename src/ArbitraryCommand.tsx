@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { Button } from "./components/ui/button";
 import React from "react";
 
@@ -10,6 +9,7 @@ import { Textarea } from "./components/ui/textarea";
 import InlineCode from "./components/typography/inline-code";
 import { toMinutesAndSeconds } from "./lib/utils";
 import { Badge } from "./components/ui/badge";
+import { useFfmpeg } from "./components/ffmpeg-provider";
 
 interface Form {
     inputFiles: FileList;
@@ -19,13 +19,16 @@ interface Form {
 
 type FileData = Uint8Array | string;
 
-function ArbitraryCommand({ ffmpegRef }: { ffmpegRef: React.MutableRefObject<FFmpeg> }) {
+function ArbitraryCommand() {
     const [messages, setMessages] = useState<string[]>([]);
     const messageRef = useRef<HTMLParagraphElement | null>(null)
     const [progress, setProgress] = useState<number | null>(null)
     const [executionTime, setExecutionTime] = useState<number | null>(null)
-    const ffmpeg = ffmpegRef.current;
+    const { ffmpeg, loaded } = useFfmpeg()
 
+    if (!loaded) {
+        return <p>Loading...</p>
+    }
     ffmpeg.on("log", ({ message }) => {
         if (messageRef.current) messageRef.current.innerHTML = message;
         setMessages([...messages, message]);
@@ -40,7 +43,6 @@ function ArbitraryCommand({ ffmpegRef }: { ffmpegRef: React.MutableRefObject<FFm
     async function handleSubmit(form: Form) {
         console.log(form);
         const writeFilePromises: Promise<boolean>[] = [];
-        const ffmpeg = ffmpegRef.current;
         for (const file of form.inputFiles) {
             writeFilePromises.push(ffmpeg.writeFile(file.name, new Uint8Array(await file.arrayBuffer())));
         }

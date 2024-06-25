@@ -1,17 +1,21 @@
 import { useRef, useState } from "react";
-import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile } from "@ffmpeg/util";
 import { Button } from "../components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { toMinutesAndSeconds } from "@/lib/utils";
+import { useFfmpeg } from "@/components/ffmpeg-provider";
 
 
-function TranscodeAviToMp4Example({ ffmpegRef }: { ffmpegRef: React.MutableRefObject<FFmpeg> }) {
+function TranscodeAviToMp4Example() {
     const videoRef = useRef<HTMLVideoElement | null>(null)
     const messageRef = useRef<HTMLParagraphElement | null>(null)
     const [progress, setProgress] = useState<number | null>(null)
     const [executionTime, setExecutionTime] = useState<number | null>(null)
-    const ffmpeg = ffmpegRef.current;
+    const { ffmpeg, loaded } = useFfmpeg();
+
+    if (!loaded) {
+        return <p>Loading...</p>
+    }
 
     ffmpeg.on("log", ({ message }) => {
         if (messageRef.current) messageRef.current.innerHTML = message;
@@ -24,7 +28,6 @@ function TranscodeAviToMp4Example({ ffmpegRef }: { ffmpegRef: React.MutableRefOb
 
     const transcode = async () => {
         const videoURL = "https://raw.githubusercontent.com/ffmpegwasm/testdata/master/video-15s.avi";
-        const ffmpeg = ffmpegRef.current;
         await ffmpeg.writeFile("input.avi", await fetchFile(videoURL));
         await ffmpeg.exec(["-i", "input.avi", "output.mp4"]);
         const fileData = await ffmpeg.readFile('output.mp4');
