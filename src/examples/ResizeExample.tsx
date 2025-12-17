@@ -25,7 +25,7 @@ function ResizeExample() {
         const result = await ffmpeg.exec(args);
         console.log('Result:', result);
         const fileData = await ffmpeg.readFile('2.jpg');
-        const data = new Uint8Array(fileData as ArrayBuffer);
+        const data = new Uint8Array(fileData as unknown as ArrayBuffer);
         if (imageRef.current) {
             imageRef.current.src = URL.createObjectURL(
                 new Blob([data.buffer], { type: 'image/jpeg' })

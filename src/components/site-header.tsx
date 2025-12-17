@@ -6,15 +6,11 @@ import { MobileNav } from "./mobile-nav"
 import { Icons } from "./icons"
 import { MainNav } from "./main-nav"
 import { useFfmpeg } from "@/components/ffmpeg-provider"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip"
-import { useIsTouchDevice } from "@/hooks/is-touch"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 
 export function SiteHeader() {
 
     const { loaded } = useFfmpeg()
-
-    const isTouchDevice = useIsTouchDevice()
 
     const trigger = <div>
         <span className={cn("h-2 w-2 rounded-full inline-block", loaded ? "bg-green-500" : "bg-red-500")} />

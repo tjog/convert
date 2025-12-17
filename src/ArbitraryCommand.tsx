@@ -81,7 +81,7 @@ function ArbitraryCommand() {
             } else if (type === "webp") {
                 mimeType = "image/webp";
             }
-            const file = new File([fileData[i] as ArrayBuffer], outputFileName, { type: mimeType });
+            const file = new File([fileData[i] as unknown as ArrayBuffer], outputFileName, { type: mimeType });
             const url = URL.createObjectURL(file);
             console.log(file);
             console.log(url);
