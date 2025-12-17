@@ -1,0 +1,49 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+
+    # Native 2-day cooldown: Wait 2 days after release before opening PR
+    cooldown:
+      semver-major-days: 7   # Wait 7 days for major updates (breaking changes)
+      semver-minor-days: 2   # Wait 2 days for minor updates (new features)
+      semver-patch-days: 2   # Wait 2 days for patch updates (bug fixes)
+
+    # Group all minor and patch updates into a single PR
+    groups:
+      dependencies:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+
+    # Keep major updates separate for manual review
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+    labels:
+      - "dependencies"
+      - "npm"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
