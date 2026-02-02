@@ -32,7 +32,7 @@
     "react-hook-form": "^7.71.1",
     "react-router": "^6.30.3",
     "react-router-dom": "^6.30.3",
-    "tailwind-merge": "^2.3.0",
+    "tailwind-merge": "^2.6.1",
     "tailwindcss-animate": "^1.0.7",
     "vite-plugin-static-copy": "^1.0.5",
     "zod": "^3.23.8"
@@ -44,7 +44,7 @@
     "@typescript-eslint/eslint-plugin": "^7.14.1",
     "@typescript-eslint/parser": "^7.14.1",
     "@vitejs/plugin-react-swc": "^3.7.0",
-    "autoprefixer": "^10.4.19",
+    "autoprefixer": "^10.4.24",
     "eslint": "^8.56.0",
     "eslint-plugin-react": "^7.34.3",
     "eslint-plugin-react-hooks": "^4.6.2",
